@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Denuncias" ALTER COLUMN "fecha" SET DEFAULT CURRENT_TIMESTAMP;
