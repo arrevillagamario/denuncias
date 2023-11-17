@@ -3,38 +3,50 @@ import bcrypt from "bcrypt";
 import prisma from "@/libs/prisma";
 
 export async function POST(request) {
-  const data = await request.json();
+  try {
+    const data = await request.json();
 
-  const userFound = await prisma.user.findUnique({
-    where: {
-      dui: parseInt(data.dui),
-    },
-  });
+    const userFound = await prisma.user.findUnique({
+      where: {
+        dui: parseInt(data.dui),
+      },
+    });
 
-  if (userFound) {
+    if (userFound) {
+      return NextResponse.json(
+        {
+          message: "Este DUI ya ha sido registrado",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+    console.log(data);
+
+    const hashPassword = await bcrypt.hash(data.password, 10);
+
+    const newUser = await prisma.user.create({
+      data: {
+        dui: parseInt(data.dui),
+        nombre: data.nombre,
+        apellido: data.apellido,
+        email: data.email,
+        password: hashPassword,
+      },
+    });
+    const { password: _, ...user } = newUser;
+    return NextResponse.json(user);
+  } catch (error) {
     return NextResponse.json(
       {
-        message: "Este DUI ya ha sido registrado",
+        message: error.message,
       },
       {
         status: 400,
       }
     );
   }
-  console.log(data);
-
-  const hashPassword = await bcrypt.hash(data.password, 10);
-
-  const newUser = await prisma.user.create({
-    data: {
-      dui: parseInt(data.dui),
-      nombre: data.nombre,
-      apellido: data.apellido,
-      email: data.email,
-      password: hashPassword,
-    },
-  });
-  return NextResponse.json(newUser);
 }
 
 export async function GET() {

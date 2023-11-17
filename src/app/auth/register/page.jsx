@@ -1,7 +1,8 @@
 "use client";
 import { useForm } from "react-hook-form";
-
+import { useRouter } from "next/navigation";
 const Register = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -16,6 +17,9 @@ const Register = () => {
     });
     const resJSON = await res.json();
     console.log(resJSON);
+    if (res.ok) {
+      router.push("/auth/login");
+    }
   });
 
   return (

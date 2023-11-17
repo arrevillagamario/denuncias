@@ -1,16 +1,40 @@
 "use client";
 
 import { useState } from "react";
-
+import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const Login = () => {
-  const [info, setInfo] = useState();
+  /*   const [info, setInfo] = useState();
   const [user, setUser] = useState();
   const [pass, setPass] = useState();
+  const [error, setError] = useState(); */
+
+  const router = useRouter();
+
   const [error, setError] = useState();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = (e) => {
+  const submit = handleSubmit(async (data) => {
+    const res = await signIn("credentials", {
+      dui: parseInt(data.dui),
+      password: data.password,
+      redirect: false,
+    });
+    if (res.error) {
+      setError(res.error);
+    } else {
+      router.push("/denuncias");
+    }
+    console.log(res);
+  });
+  /* const submit = (e) => {
     e.preventDefault();
-
+    
     if (user === "Mario Arrevillaga" && pass === "12345") {
       navigate("/user");
     } else {
@@ -19,7 +43,7 @@ const Login = () => {
         setError(false);
       }, 3000);
     }
-  };
+  }; */
 
   return (
     <div
@@ -28,14 +52,14 @@ const Login = () => {
     >
       <div className="w-full max-w-xs conatiner mx-auto py-20 rounded-xl">
         <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={submit} className="space-y-6">
             <h4 className="text-xl font-medium text-gray-900 text-center">
               Login
             </h4>
 
             {error && (
               <p className="text-center bg-red-700 text-white">
-                Usuario incorrecto
+                Credenciales incorrectas
               </p>
             )}
             <div>
@@ -46,10 +70,16 @@ const Login = () => {
                 type="text"
                 name="carnet"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                onChange={(e) => {
-                  setUser(e.target.value);
-                }}
+                {...register("dui", {
+                  required: {
+                    value: true,
+                    message: "Dui is required",
+                  },
+                })}
               />
+              {errors.dui && (
+                <span className="text-red-700">{errors.dui.message}</span>
+              )}
             </div>
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -60,8 +90,16 @@ const Login = () => {
                 placeholder="••••••••"
                 name="password"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                onChange={(e) => setPass(e.target.value)}
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "Contraseña es requerida",
+                  },
+                })}
               />
+              {errors.password && (
+                <span className="text-red-700">{errors.password.message}</span>
+              )}
             </div>
             <div className="flex items-start">
               <div className="flex items-start"></div>
