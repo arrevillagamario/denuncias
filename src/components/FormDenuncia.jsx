@@ -30,26 +30,27 @@ const FormDenuncia = ({ usuario }) => {
       setTimeout(() => {
         setError(false);
       }, 3000);
-    }
-    try {
-      const data = {
-        user: { dui: usuario.user.email },
-        municipio: municipio,
-        direccion: direccion,
-        descripcion: descripcion,
-        estado: "En revision",
-      };
-      axios
-        .post("/api/denuncias", data)
-        .then((respuesta) => {
-          console.log("Respuesta del servidor:", respuesta.data);
-          alert("Su numero de denuncia es: " + respuesta.data.denuncia.id);
-        })
-        .catch((error) => {
-          console.error("Error en la solicitud:", error);
-        });
-    } catch (error) {
-      console.error("Error en la solicitud:", error.message);
+    } else {
+      try {
+        const data = {
+          user: { dui: usuario.user.email },
+          municipio: municipio,
+          direccion: direccion,
+          descripcion: descripcion,
+          estado: "En revision",
+        };
+        axios
+          .post("/api/denuncias", data)
+          .then((respuesta) => {
+            console.log("Respuesta del servidor:", respuesta.data);
+            alert("Su numero de denuncia es: " + respuesta.data.denuncia.id);
+          })
+          .catch((error) => {
+            console.error("Error en la solicitud:", error);
+          });
+      } catch (error) {
+        console.error("Error en la solicitud:", error.message);
+      }
     }
   }
 
