@@ -7,10 +7,30 @@ const FormDenuncia = ({ usuario }) => {
   const [municipio, setMunicipio] = useState();
   const [direccion, setDireccion] = useState();
   const [descripcion, setDescripcion] = useState();
+  const [telefono, setTelefono] = useState();
+  const [error, setError] = useState(false);
 
   async function submit(e) {
     e.preventDefault();
+    const oData = {
+      municipio,
+      direccion,
+      descripcion,
+      telefono,
+    };
+    console.log(oData);
 
+    if (
+      oData.municipio === undefined ||
+      oData.direccion === undefined ||
+      oData.telefono === undefined ||
+      oData.descripcion === undefined
+    ) {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
     try {
       const data = {
         user: { dui: usuario.user.email },
@@ -19,29 +39,15 @@ const FormDenuncia = ({ usuario }) => {
         descripcion: descripcion,
         estado: "En revision",
       };
-      const config = {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
-      const res = await fetch("/api/denuncias", config);
-
-      if (res.ok) {
-        // La solicitud fue exitosa, puedes manejar la respuesta aquí si es necesario
-        console.log("Solicitud exitosa");
-        Swal.fire({
-          title: "Denuncia enviada",
-
-          icon: "success",
-          color: "green",
+      axios
+        .post("/api/denuncias", data)
+        .then((respuesta) => {
+          console.log("Respuesta del servidor:", respuesta.data);
+          alert("Su numero de denuncia es: " + respuesta.data.denuncia.id);
+        })
+        .catch((error) => {
+          console.error("Error en la solicitud:", error);
         });
-      } else {
-        // La solicitud falló, maneja el error
-        console.error("Error en la solicitud:", res.statusText);
-      }
     } catch (error) {
       console.error("Error en la solicitud:", error.message);
     }
@@ -52,6 +58,13 @@ const FormDenuncia = ({ usuario }) => {
       className="mr-32 flex flex-col w-96  p-5 rounded-lg shadow-lg"
       onSubmit={submit}
     >
+      {error && (
+        <>
+          <div className="bg-red-700 text-white font-bold px-15 py-5 rounded-md text-center">
+            <p>Debe llenar todos los campos</p>
+          </div>
+        </>
+      )}
       <label>Municipio de la denuncia</label>
       <select
         className="border border-black text-center"
@@ -73,7 +86,11 @@ const FormDenuncia = ({ usuario }) => {
         onChange={(e) => setDireccion(e.target.value)}
       />
       <label className="mt-4">Numéro de teléfono</label>
-      <input type="text" className="border border-black  shadow-md" />
+      <input
+        type="text"
+        className="border border-black  shadow-md"
+        onClick={(e) => setTelefono(e.target.value)}
+      />
       <label className="mt-4">Descripcion de la denuncia</label>
       <textarea
         type="text"
