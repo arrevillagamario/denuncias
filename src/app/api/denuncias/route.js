@@ -39,3 +39,9 @@ export async function POST(request) {
     );
   }
 }
+
+export async function GET() {
+  const denuncias = await prisma.denuncias.findMany();
+
+  return NextResponse.json(denuncias);
+}

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useReactToPrint } from "react-to-print";
+
 const Login = () => {
   /*   const [info, setInfo] = useState();
   const [user, setUser] = useState();
@@ -70,6 +72,7 @@ const Login = () => {
               <input
                 type="text"
                 name="carnet"
+                placeholder="Numero de DUI"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 {...register("dui", {
                   required: {
@@ -78,6 +81,7 @@ const Login = () => {
                   },
                 })}
               />
+
               {errors.dui && (
                 <span className="text-red-700">{errors.dui.message}</span>
               )}

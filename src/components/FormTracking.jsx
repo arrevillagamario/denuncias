@@ -4,8 +4,15 @@ import { useState } from "react";
 import axios from "axios";
 import { formatearFecha } from "@/utils/helpers";
 import { set } from "react-hook-form";
-
+import { useReactToPrint } from "react-to-print";
+import { useRef } from "react";
 const FormTracking = () => {
+  const conponentPDF = useRef();
+  const generatePDF = useReactToPrint({
+    content: () => conponentPDF.current,
+    documentTitle: "userdata",
+    onafterprint: () => alert("Printed Successfully"),
+  });
   const [numero, setNumero] = useState();
   const [res, setRes] = useState({});
   const [error, setError] = useState(false);
@@ -62,7 +69,7 @@ const FormTracking = () => {
             <h2 className="text-3xl mb-5 font-bold text-center uppercase">
               Detalles de la denuncia
             </h2>
-            <table className="border">
+            <table ref={conponentPDF} className="border">
               <thead>
                 <th className="bg-teal-600 py-3 px-7 text-white border">Id</th>
                 <th className="bg-teal-600 py-3 px-7 text-white border">
@@ -104,6 +111,13 @@ const FormTracking = () => {
                 </tr>
               </tbody>
             </table>
+            <button
+              className="bg-teal-600 rounded-lg py-2 px-7 mt-5 text-white "
+              type="submit"
+              onClick={generatePDF}
+            >
+              PDF
+            </button>
           </article>
         )}
         {error && (

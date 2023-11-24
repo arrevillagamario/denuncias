@@ -23,6 +23,7 @@ const Index = async () => {
       <div className="mt-4">
         <FormTracking />
       </div>
+
       <div className="ml-5 mb-5 ">{usuario && <Logout></Logout>}</div>
     </div>
   );

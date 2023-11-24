@@ -99,9 +99,10 @@ const FormDenuncia = ({ usuario }) => {
         className="border border-black shadow-md"
         onChange={(e) => setDescripcion(e.target.value)}
       />
+
       <input
         type="submit"
-        className="mt-4 bg-teal-600 text-white h-10 hover:bg-teal-400 transition"
+        className="mt-4 bg-teal-600 text-white h-10 hover:bg-teal-400 cursor-pointer transition"
       />
     </form>
   );
