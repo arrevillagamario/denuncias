@@ -28,9 +28,10 @@ const Login = () => {
     if (res.error) {
       setError(res.error);
     } else {
-      router.push("/denuncias");
+      router.push("/");
+      router.refresh();
     }
-    console.log(res);
+    /* console.log(res); */
   });
   /* const submit = (e) => {
     e.preventDefault();

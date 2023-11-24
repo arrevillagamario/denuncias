@@ -22,9 +22,10 @@ export async function POST(request) {
         }
       );
     }
-    console.log(data);
-
-    const hashPassword = await bcrypt.hash(data.password, 10);
+    /* console.log(data) */ const hashPassword = await bcrypt.hash(
+      data.password,
+      10
+    );
 
     const newUser = await prisma.user.create({
       data: {

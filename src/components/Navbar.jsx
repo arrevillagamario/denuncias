@@ -1,13 +1,18 @@
 import React from "react";
 import Link from "next/link";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-const Navbar = () => {
+const Navbar = async () => {
+  const sesion = await getServerSession(authOptions);
+  console.log(sesion);
+
   return (
     <div>
       <nav>
         <div className="container mx-auto py-4 ">
-          <div className="lg:flex lg:justify-between items-center mb-4 flex lg:items-center  lg:mr-5  ">
-            <div className="">
+          <div className="lg:flex lg:justify-between items-end mb-4 flex lg:items-center  lg:mr-5  ">
+            <div>
               <img
                 src={"/img/logo.png"}
                 alt=""
@@ -18,18 +23,32 @@ const Navbar = () => {
               <Link href={"/"}>Inicio</Link>
               <Link href={"/about"}>About</Link>
               <Link href={"/contacto"}>Contacto</Link>
-              <Link
-                href={"/auth/login"}
-                className="bg-teal-600 text-white hover:bg-teal-400 hover:text-black  py-2 px-3 rounded-xl"
-              >
-                Login
-              </Link>
-              <Link
-                href={"/auth/register"}
-                className="bg-teal-600 text-white hover:bg-teal-400 hover:text-black  py-2 px-3 rounded-xl"
-              >
-                Sign Up
-              </Link>
+              {!sesion ? (
+                <>
+                  <Link
+                    href={"/auth/login"}
+                    className="bg-teal-600 text-white hover:bg-teal-400 hover:text-black  py-2 px-3 rounded-xl"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href={"/auth/register"}
+                    className="bg-teal-600 text-white hover:bg-teal-400 hover:text-black  py-2 px-3 rounded-xl"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href={"/denuncias"}>Denuncias</Link>
+
+                  <div className="flex flex-col justify-center items-center">
+                    <img src="/img/PhUserBold.svg" width={50} alt="Imagen" />
+                    <p>{sesion.user.name.first}</p>
+                    <p>{sesion.user.name.last}</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

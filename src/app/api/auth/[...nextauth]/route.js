@@ -2,7 +2,7 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/libs/prisma";
 import bcrypt from "bcrypt";
-const authOptions = {
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -23,7 +23,7 @@ const authOptions = {
         });
 
         if (!userFound) throw new Error("No se encontro el usuario");
-        console.log(userFound);
+        /* console.log(userFound); */
 
         const matchPassword = await bcrypt.compare(
           credentials.password,
@@ -34,8 +34,9 @@ const authOptions = {
 
         return {
           id: userFound.dui,
-          name: userFound.nombre,
-          email: userFound.email,
+          name: { first: userFound.nombre, last: userFound.apellido },
+          email: userFound.dui,
+          dui: userFound.dui,
         };
       },
     }),

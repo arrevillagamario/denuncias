@@ -1,6 +1,10 @@
 import React from "react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Logout from "@/components/Logout";
 
-const Index = () => {
+const Index = async () => {
+  const usuario = await getServerSession(authOptions);
   return (
     <div>
       <div className="flex flex-col items-center justify-center mb-8">
@@ -29,6 +33,7 @@ const Index = () => {
           Buscar
         </button>
       </div>
+      <div className="ml-5 mb-5 ">{usuario && <Logout></Logout>}</div>
     </div>
   );
 };

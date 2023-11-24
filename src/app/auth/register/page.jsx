@@ -16,7 +16,7 @@ const Register = () => {
       headers: { "Content-Type": "application/json" },
     });
     const resJSON = await res.json();
-    console.log(resJSON);
+    /* console.log(resJSON); */
     if (res.ok) {
       router.push("/auth/login");
     }

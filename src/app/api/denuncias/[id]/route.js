@@ -19,10 +19,10 @@ export async function GET(request, { params }) {
       where: {
         id: parseInt(id, 10),
       },
-      //include: {
-      //user: true,
-      //municipio: true,
-      //},
+      include: {
+        user: true,
+        municipio: true,
+      },
     });
 
     console.log("denuncia:", denuncia);

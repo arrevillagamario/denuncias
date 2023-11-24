@@ -1,11 +1,6 @@
 import React from "react";
-import Link from "next/link";
-import facebook from "../../public/img/facebook.png";
-import insta from "../../public/img/instagram.png";
-import twiter from "../../public/img/twiter.png";
-import logo from "../../public/img/logo.png";
 
-const Footer = () => {
+const Footer = async () => {
   return (
     <div>
       {/* <div className="pt-6 container mb-3">
@@ -13,6 +8,7 @@ const Footer = () => {
           Log Out
         </Link>
       </div> */}
+
       <footer style={{ backgroundColor: "#9cc8be" }}>
         <div className="lg:flex lg:justify-center lg:space-x-10 lg:h-52 lg:items-center flex flex-col items-center text-center space-y-6 py-3 lg:text-left lg:space-y-0 lg:flex-row">
           <div>
