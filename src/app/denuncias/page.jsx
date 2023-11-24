@@ -5,6 +5,8 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const Denuncias = async () => {
   const usuario = await getServerSession(authOptions);
+
+  console.log(usuario.email);
   return (
     <div>
       <h1 className="text-center uppercase text-4xl  lg:text-6xl font-bold mt-20">

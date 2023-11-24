@@ -7,8 +7,12 @@ import { useRouter } from "next/navigation";
 const Logout = () => {
   const router = useRouter();
   function handle() {
-    signOut();
-    router.push("/");
+    const result = confirm("deseas cerrar sesion");
+
+    if (result) {
+      signOut();
+      router.push("/");
+    }
   }
 
   return (

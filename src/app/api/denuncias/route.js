@@ -6,8 +6,11 @@ export async function POST(request) {
     const { user, municipio, descripcion, direccion, estado } =
       await request.json();
 
-    console.log("user:", user);
+    console.log("user:", user.dui);
     console.log("id_municipio:", municipio);
+    const { dui } = user;
+
+    console.log(dui);
 
     const newDenuncia = await prisma.denuncias.create({
       data: {

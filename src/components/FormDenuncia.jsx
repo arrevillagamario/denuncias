@@ -1,31 +1,64 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const FormDenuncia = ({ usuario }) => {
-  console.log(usuario);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const [municipio, setMunicipio] = useState();
+  const [direccion, setDireccion] = useState();
+  const [descripcion, setDescripcion] = useState();
 
-  const submit = handleSubmit(async (data) => {
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    });
-    const resJSON = await res.json();
-    /* console.log(resJSON); */
-    if (res.ok) {
-      router.push("/auth/login");
+  async function submit(e) {
+    e.preventDefault();
+
+    try {
+      const data = {
+        user: { dui: usuario.user.email },
+        municipio: municipio,
+        direccion: direccion,
+        descripcion: descripcion,
+        estado: "En revision",
+      };
+      const config = {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+      const res = await fetch("/api/denuncias", config);
+
+      if (res.ok) {
+        // La solicitud fue exitosa, puedes manejar la respuesta aquí si es necesario
+        console.log("Solicitud exitosa");
+        Swal.fire({
+          title: "Denuncia enviada",
+
+          icon: "success",
+          color: "green",
+        });
+      } else {
+        // La solicitud falló, maneja el error
+        console.error("Error en la solicitud:", res.statusText);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error.message);
     }
-  });
+  }
 
   return (
-    <form className="mr-32 flex flex-col w-96  p-5 rounded-lg shadow-lg">
+    <form
+      className="mr-32 flex flex-col w-96  p-5 rounded-lg shadow-lg"
+      onSubmit={submit}
+    >
       <label>Municipio de la denuncia</label>
-      <select className="border border-black text-center" name="" id="">
+      <select
+        className="border border-black text-center"
+        name=""
+        id=""
+        onChange={(e) => setMunicipio(Number(e.target.value))}
+      >
         <option value="">--Selecciona el municipio--</option>
         <option value="1">Metapan</option>
         <option value="2">Santa Ana</option>
@@ -34,7 +67,11 @@ const FormDenuncia = ({ usuario }) => {
         <option value="5">Texistepeque</option>
       </select>
       <label className="mt-4">Dirección exacta de la denuncia</label>
-      <input type="text" className="border border-black  shadow-md" />
+      <input
+        type="text"
+        className="border border-black  shadow-md"
+        onChange={(e) => setDireccion(e.target.value)}
+      />
       <label className="mt-4">Numéro de teléfono</label>
       <input type="text" className="border border-black  shadow-md" />
       <label className="mt-4">Descripcion de la denuncia</label>
@@ -42,6 +79,7 @@ const FormDenuncia = ({ usuario }) => {
         type="text"
         rows="5"
         className="border border-black shadow-md"
+        onChange={(e) => setDescripcion(e.target.value)}
       />
       <input
         type="submit"

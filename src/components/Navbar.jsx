@@ -5,7 +5,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const Navbar = async () => {
   const sesion = await getServerSession(authOptions);
-  console.log(sesion);
 
   return (
     <div>

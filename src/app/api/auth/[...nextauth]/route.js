@@ -36,7 +36,6 @@ export const authOptions = {
           id: userFound.dui,
           name: { first: userFound.nombre, last: userFound.apellido },
           email: userFound.dui,
-          dui: userFound.dui,
         };
       },
     }),
