@@ -3,10 +3,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { formatearFecha } from "@/utils/helpers";
+import { set } from "react-hook-form";
 
 const FormTracking = () => {
   const [numero, setNumero] = useState();
   const [res, setRes] = useState({});
+  const [error, setError] = useState(false);
   function submit(e) {
     e.preventDefault();
 
@@ -15,6 +17,7 @@ const FormTracking = () => {
       .then(function (response) {
         if (!response) {
           setRes();
+          setError(true);
         } else {
           setRes(response);
         }
@@ -22,11 +25,12 @@ const FormTracking = () => {
       .catch(function (error) {
         console.log(error);
         console.log(error);
+        setError(true);
       });
   }
 
-  /*   console.log(res.data);
-   */
+  console.log(res.data);
+
   return (
     <form onSubmit={submit}>
       <div className="flex flex-col items-center justify-center mb-8">
@@ -46,7 +50,7 @@ const FormTracking = () => {
         </button>
         {res.data && (
           <article className="mt-10 bg-slate-100 rounded-md py-10 px-24 border shadow-lg">
-            <h3>No. Denuncia: {res.data?.id} </h3>
+            {/* <h3>No. Denuncia: {res.data?.id} </h3>
             <p>
               Denunciante: {res.data?.user.nombre} {res.data?.user.apellido}
             </p>
@@ -54,8 +58,58 @@ const FormTracking = () => {
             <p>Direccion: {res.data?.direccion}</p>
             <p>Descripción: {res.data?.descripcion}</p>
             <p>Fecha: {formatearFecha(res.data?.fecha)}</p>
-            <p>Estado: {res.data?.estado}</p>
+            <p>Estado: {res.data?.estado}</p> */}
+            <h2 className="text-3xl mb-5 font-bold text-center uppercase">
+              Detalles de la denuncia
+            </h2>
+            <table className="border">
+              <thead>
+                <th className="bg-teal-600 py-3 px-7 text-white border">Id</th>
+                <th className="bg-teal-600 py-3 px-7 text-white border">
+                  Denunciante
+                </th>
+                <th className="bg-teal-600 py-3 px-7 text-white border">
+                  Municipio
+                </th>
+                <th className="bg-teal-600 py-3 px-7 text-white border">
+                  Dirección
+                </th>
+                <th className="bg-teal-600 py-3 px-7 text-white border">
+                  Descripción
+                </th>
+
+                <th className="bg-teal-600 py-3 px-7 text-white border">
+                  Fecha
+                </th>
+                <th className="bg-teal-600 py-3 px-7 text-white border">
+                  Estado
+                </th>
+              </thead>
+
+              <tbody>
+                <tr className=" text-center">
+                  <td className="border py-3 px-7">{res.data?.id}</td>
+                  <td className="border py-3 px-7">
+                    {res.data?.user.nombre} {res.data?.user.apellido}
+                  </td>
+                  <td className="border py-3 px-7">
+                    {res.data?.municipio.nombre}
+                  </td>
+                  <td className="border py-3 px-7">{res.data?.direccion}</td>
+                  <td className="border py-3 px-7"> {res.data?.descripcion}</td>
+                  <td className="border py-3 px-7">
+                    {formatearFecha(res.data?.fecha)}
+                  </td>
+                  <td className="border py-3 px-7">{res.data?.estado}</td>
+                </tr>
+              </tbody>
+            </table>
           </article>
+        )}
+        {error && (
+          <div className="text-red-700 underline">
+            No se ha encontrado ninguna{" "}
+          </div>
         )}
       </div>
     </form>
